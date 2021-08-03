@@ -1,0 +1,52 @@
+{
+  "name": "deliveryapp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "flow": "flow",
+    "test": "jest",
+    "lint": "eslint .",
+    "lintAll": "eslint . && prettier -l \"**/*.js\"",
+    "pod": "cd ios && pod install",
+    "xcode": "xed -b ios"
+  },
+  "dependencies": {
+    "@expo/react-native-action-sheet": "^3.9.0",
+    "@react-native-async-storage/async-storage": "^1.15.5",
+    "@react-native-community/masked-view": "^0.1.11",
+    "@react-navigation/native": "^6.0.1",
+    "@react-navigation/stack": "^6.0.1",
+    "react": "17.0.1",
+    "react-native": "0.64.2",
+    "react-native-gesture-handler": "^1.10.3",
+    "react-native-reanimated": "^2.2.0",
+    "react-native-safe-area-context": "^3.2.0",
+    "react-native-screens": "^3.5.0",
+    "react-native-svg": "^12.1.1",
+    "react-native-uuid": "^2.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@babel/plugin-proposal-export-default-from": "^7.14.5",
+    "@babel/plugin-proposal-export-namespace-from": "^7.14.5",
+    "@babel/runtime": "^7.14.8",
+    "@jest/create-cache-key-function": "^27.0.6",
+    "@react-native-community/eslint-config": "^3.0.0",
+    "babel-jest": "^27.0.6",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.23.4",
+    "flow-bin": "^0.122.0",
+    "jest": "^27.0.6",
+    "metro-react-native-babel-preset": "^0.66.2",
+    "react-test-renderer": "17.0.1",
+    "regenerator-runtime": "^0.13.9"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

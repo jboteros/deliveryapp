@@ -1,0 +1,7 @@
+android/docs
+flow-typed/
+ios/docs
+ios/Pods
+ios/build
+metro.config.js
+__generated__
