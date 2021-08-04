@@ -1,0 +1,5 @@
+// @flow
+
+export const API_PENDING = "DELIVERIES_API_PENDING";
+export const API_SUCCESS = "DELIVERIES_API_SUCCESS";
+export const API_ERROR = "DELIVERIES_API_ERROR";
