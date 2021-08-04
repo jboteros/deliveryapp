@@ -23,8 +23,6 @@ export function HomeScreen() {
     (state) => state.finishDeliveriesReducer,
   );
 
-  console.log("🚀 ~ HomeScreen ~ finishDeliveries", finishDeliveries);
-
   useEffect(() => {
     dispatch(
       deliveriesActionCreator(
