@@ -8,7 +8,7 @@ const initialState = {
   error: "",
 };
 
-export type DeliveriesProp = Array<{|
+export type FinishDeliveriesProp = Array<{|
   status: string,
   latitude: string,
   longitude: string,
@@ -18,7 +18,7 @@ export type DeliveriesProp = Array<{|
 
 export type State = {|
   loading: boolean,
-  finishDeliveries: ?DeliveriesProp,
+  finishDeliveries: ?FinishDeliveriesProp,
   error: string,
 |};
 

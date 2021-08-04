@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { Text } from "@/components";
 import { SafeAreaView } from "@/navigation";
@@ -10,8 +10,8 @@ import { DeliveriesActionCreator as deliveriesActionCreator } from "@/redux/Deli
 import { FinishDeliveriesActionCreator as finishDeliveriesActionCreator } from "@/redux/FinishDeliveries/ActionCreator";
 import { DeliveriesItem } from "./DeliveriesItem";
 
-const _renderItem = ({ item }) => {
-  return <DeliveriesItem item={item} />;
+const _renderItem = ({ item, deliveredItem }) => {
+  return <DeliveriesItem item={item} deliveredItem={deliveredItem} />;
 };
 
 export function HomeScreen() {
@@ -19,7 +19,7 @@ export function HomeScreen() {
   const { deliveries, loading } = useSelector(
     (state) => state.deliveriesReducer,
   );
-  const finishDeliveries = useSelector(
+  const { finishDeliveries } = useSelector(
     (state) => state.finishDeliveriesReducer,
   );
 
@@ -41,6 +41,17 @@ export function HomeScreen() {
     );
   }, [dispatch]);
 
+  const renderItem = useCallback(
+    ({ item }) => {
+      const deliveredItem = finishDeliveries.find(
+        ({ deliveryId }) => deliveryId === item.id,
+      );
+
+      return _renderItem({ item, deliveredItem });
+    },
+    [finishDeliveries],
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -55,12 +66,12 @@ export function HomeScreen() {
           <Text.H1>Deliveries</Text.H1>
         </View>
       </View>
-      {loading && !deliveries ? (
+      {loading ? (
         <ActivityIndicator size="large" />
       ) : (
         <FlatList
           data={deliveries.filter(Boolean)}
-          renderItem={_renderItem}
+          renderItem={renderItem}
           keyExtractor={(item, index) => item.id}
         />
       )}
