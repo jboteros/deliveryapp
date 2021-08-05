@@ -24,19 +24,8 @@ export function HomeScreen() {
   );
 
   useEffect(() => {
-    dispatch(
-      deliveriesActionCreator(
-        "https://60e84194673e350017c21844.mockapi.io/api/deliveries",
-      ),
-    );
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(
-      finishDeliveriesActionCreator(
-        "https://60e84194673e350017c21844.mockapi.io/api/finishDelivery/",
-      ),
-    );
+    dispatch(deliveriesActionCreator());
+    dispatch(finishDeliveriesActionCreator());
   }, [dispatch]);
 
   const renderItem = useCallback(
