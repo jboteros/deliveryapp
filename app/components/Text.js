@@ -13,25 +13,13 @@ const styles = StyleSheet.create({
   text: {
     color: colors.dark,
   },
+
   headline1: {
-    fontSize: normalize(44, NORMALIZE_FONTS),
-    fontWeight: "bold",
-  },
-  headline2: {
-    fontWeight: "600",
-    fontSize: normalize(32, NORMALIZE_FONTS),
-    letterSpacing: 0.25,
-  },
-  headline3: {
-    fontWeight: "bold",
-    fontSize: normalize(26, NORMALIZE_FONTS),
-  },
-  headline4: {
     fontWeight: "600",
     fontSize: normalize(20, NORMALIZE_FONTS),
     letterSpacing: 0.15,
   },
-  headline5: {
+  headline2: {
     fontWeight: "600",
     fontSize: normalize(18, NORMALIZE_FONTS),
     letterSpacing: 0.15,
@@ -41,6 +29,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.15,
     lineHeight: normalize(18, NORMALIZE_FONTS),
   },
+  body2: { fontSize: normalize(16, NORMALIZE_FONTS), letterSpacing: 0.5 },
+  body1: { fontSize: normalize(14, NORMALIZE_FONTS), letterSpacing: 0.25 },
 });
 
 export function Text({ style, ...props }: Props): React$Element<any> {
@@ -55,9 +45,8 @@ export const withDefaultStyle =
 
 Text.H1 = withDefaultStyle(styles.headline1)(Text);
 Text.H2 = withDefaultStyle(styles.headline2)(Text);
-Text.H3 = withDefaultStyle(styles.headline3)(Text);
-Text.H4 = withDefaultStyle(styles.headline4)(Text);
-Text.H5 = withDefaultStyle(styles.headline5)(Text);
+Text.Body2 = withDefaultStyle(styles.body2)(Text);
+Text.Body1 = withDefaultStyle(styles.body1)(Text);
 
 Text.Subtitle = withDefaultStyle(styles.subtitle)(Text);
 

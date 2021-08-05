@@ -1,45 +1,240 @@
 // @flow
 
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useCallback, useLayoutEffect } from "react";
+import { View, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import MapView, { Marker } from "react-native-maps";
+import { useNavigation } from "@/navigation";
 import { Text } from "@/components";
-import { SafeAreaView } from "@/navigation";
-import { colors } from "@/themes";
-// import { useDispatch, useSelector } from "react-redux";
-// import { DeliveriesActionCreator as deliveriesActionCreator } from "@/redux/Deliveries/ActionCreator";
-// import { FinishDeliveriesActionCreator as finishDeliveriesActionCreator } from "@/redux/FinishDeliveries/ActionCreator";
+import { colors, metrics } from "@/themes";
+import { DeliveryIcon } from "@/svg";
+import { DeleteDeliveryActionCreator as deleteDeliveryActionCreator } from "@/redux/FinishDeliveries/ActionCreator";
+import { AddDeliveryActionCreator as addDeliveryActionCreator } from "@/redux/FinishDeliveries/ActionCreator";
+import { UpdateDeliveryActionCreator as updateDeliveryActionCreator } from "@/redux/FinishDeliveries/ActionCreator";
 
-export function SingleDelivery() {
-  // const dispatch = useDispatch();
-  // const { deliveries, loading } = useSelector(
-  //   (state) => state.deliveriesReducer,
-  // );
+type Props = {|
+  route: {|
+    key: string,
+    name: string,
+    params: {| item: any |},
+  |},
+|};
 
-  // useEffect(() => {
-  //   dispatch(
-  //     deliveriesActionCreator(
-  //       "https://61098931d71b67001763999c.mockapi.io/api/deliveries",
-  //     ),
-  //     finishDeliveriesActionCreator(
-  //       "https://61098931d71b67001763999c.mockapi.io/api/finishDelivery/",
-  //     ),
-  //   );
-  // }, [dispatch]);
+export function SingleDelivery({ route }: Props) {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const item = route.params.item;
+
+  const latitude = parseFloat(item.latitude);
+  const longitude = parseFloat(item.longitude);
+
+  const { finishDeliveries } = useSelector(
+    (state) => state.finishDeliveriesReducer,
+  );
+  const deliveredItem = finishDeliveries.find(
+    ({ deliveryId }) => deliveryId === item.id,
+  );
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: item?.consumer,
+    });
+  }, [item, navigation]);
+
+  const handledAddItem = useCallback(
+    (status) => {
+      Alert.alert(
+        "Alert",
+        `Do you what to update the status to ${
+          status === "delivered" ? "Delivered" : "Not delivered"
+        }`,
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          {
+            text: "Confirm",
+            onPress: () => {
+              dispatch(addDeliveryActionCreator(item, status));
+            },
+          },
+        ],
+      );
+    },
+    [dispatch, item],
+  );
+
+  const handledUpdateItem = useCallback(
+    (status) => {
+      Alert.alert(
+        "Alert",
+        `Do you what to update the status to ${
+          status === "delivered" ? "Delivered" : "Not delivered"
+        }`,
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          {
+            text: "Confirm",
+            onPress: () => {
+              dispatch(updateDeliveryActionCreator(deliveredItem, status));
+            },
+          },
+        ],
+      );
+    },
+    [deliveredItem, dispatch],
+  );
+
+  const handledDeleteItem = useCallback(() => {
+    Alert.alert("Alert", "Do you what to remove this delivery register", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "Confirm",
+        onPress: () => {
+          dispatch(deleteDeliveryActionCreator(deliveredItem.id));
+        },
+      },
+    ]);
+  }, [dispatch, deliveredItem]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <SafeAreaView edges={["right", "bottom", "left"]} />
+      <View style={styles.mapContainer}>
+        <MapView
+          style={styles.map}
+          region={{
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}>
+          <Marker coordinate={{ latitude, longitude }} />
+        </MapView>
+      </View>
+
+      <View
+        style={[
+          {
+            alignSelf: "stretch",
+            paddingVertical: 20,
+            paddingHorizontal: 10,
+            marginHorizontal: 10,
+            marginTop: 10,
+            borderRadius: metrics.borderRadius,
+          },
+        ]}>
         <View
           style={{
-            justifyContent: "space-between",
-            alignItems: "center",
             flexDirection: "row",
-            paddingVertical: 10,
+            justifyContent: "space-between",
+            marginTop: 5,
           }}>
-          <Text.H1>SingleDeliveries</Text.H1>
+          <Text.H1>{item.consumer}</Text.H1>
+          <DeliveryIcon
+            color={
+              deliveredItem?.status === "delivered"
+                ? colors.accentGreen
+                : deliveredItem?.status === "undelivered"
+                ? colors.accentRed
+                : colors.alphaDark(0.1)
+            }
+          />
+        </View>
+        <View
+          style={{
+            alignSelf: "stretch",
+            justifyContent: "space-between",
+            marginTop: 5,
+          }}>
+          <Text.Body2
+            style={{
+              color: colors.accentBlue,
+            }}>{`${item.address}, ${item.zipCode}`}</Text.Body2>
+          <Text.H2
+            style={{
+              color: colors.accentBlue,
+            }}>
+            {item.city}
+          </Text.H2>
         </View>
       </View>
+
+      <View
+        style={{
+          alignSelf: "center",
+          justifyContent: "center",
+          marginVertical: 10,
+        }}>
+        <Text.H1>
+          Status:{" "}
+          {!deliveredItem
+            ? "Pending"
+            : deliveredItem.status === "delivered"
+            ? "Delivered"
+            : "Not delivered"}
+        </Text.H1>
+      </View>
+      <View
+        style={{
+          marginHorizontal: 20,
+          flexDirection: "row",
+          borderRadius: metrics.borderRadius,
+          overflow: "hidden",
+          justifyContent: "space-between",
+        }}>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: 10,
+            backgroundColor: colors.accentGreen,
+          }}
+          onPress={() =>
+            deliveredItem
+              ? handledUpdateItem("delivered")
+              : handledAddItem("delivered")
+          }>
+          <Text.H2 style={{ color: colors.light }}>DELIVERED</Text.H2>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: 10,
+            backgroundColor: colors.accentRed,
+          }}
+          onPress={() =>
+            deliveredItem
+              ? handledUpdateItem("undelivered")
+              : handledAddItem("undelivered")
+          }>
+          <Text.H2 style={{ color: colors.light }}>UNDELIVERED</Text.H2>
+        </TouchableOpacity>
+      </View>
+      {deliveredItem && (
+        <TouchableOpacity
+          onPress={handledDeleteItem}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: 10,
+            textDecorationLine: "underline",
+          }}>
+          <Text>DELETE</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -49,22 +244,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundApp,
   },
-  headerContainer: {
-    flex: 0,
-    paddingTop: 10,
-    backgroundColor: colors.light,
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    marginBottom: 20,
-
-    shadowColor: colors.primary,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+  mapContainer: {
+    height: metrics.deviceWidth,
+    width: metrics.deviceWidth,
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });

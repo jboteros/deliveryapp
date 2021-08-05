@@ -1,7 +1,10 @@
 //  @flow
 
 const primary = "#0e1e2b";
-const accent = "#00a3e0";
+const accentBlue = "#00a3e0";
+const accentRed = "#EA4C46";
+const accentGreen = "#00D100";
+
 const light = "#fff";
 const dark = "#32444f";
 const backgroundApp = "#f4f4f4";
@@ -18,7 +21,9 @@ const alphaPrimary = (opacity: number): string => {
 
 export const colors = {
   primary,
-  accent,
+  accentBlue,
+  accentRed,
+  accentGreen,
   light,
   dark,
   backgroundApp,

@@ -1,6 +1,13 @@
 // @flow
 
-import { API_PENDING, API_SUCCESS, API_ERROR } from "./Types";
+import {
+  API_PENDING,
+  API_SUCCESS,
+  API_ADD,
+  API_UPDATE,
+  API_DELETE,
+  API_ERROR,
+} from "./Types";
 
 const initialState = {
   loading: false,
@@ -35,6 +42,42 @@ export const Reducer = (state: State = initialState, action: Action) => {
       return {
         ...state,
         finishDeliveries: action.payload,
+        loading: false,
+      };
+    case API_ADD:
+      let newItems = state.finishDeliveries;
+      newItems?.push(action.payload);
+      return {
+        ...state,
+        finishDeliveries: newItems,
+      };
+    case API_DELETE:
+      const items = state.finishDeliveries ?? [];
+      const idx = items
+        ?.filter(Boolean)
+        .findIndex((t) => t.id === action.payload);
+      if (idx > -1) {
+        items.splice(idx, 1);
+      }
+
+      return {
+        ...state,
+        finishDeliveries: items,
+        loading: false,
+      };
+    case API_UPDATE:
+      const itemsUpdate = state.finishDeliveries ?? [];
+      const idxUpdate = itemsUpdate
+        ?.filter(Boolean)
+        .findIndex((t) => t.id === action.payload.id);
+
+      if (idxUpdate > -1) {
+        itemsUpdate[idxUpdate] = action.payload;
+      }
+
+      return {
+        ...state,
+        finishDeliveries: itemsUpdate,
         loading: false,
       };
     case API_ERROR:
