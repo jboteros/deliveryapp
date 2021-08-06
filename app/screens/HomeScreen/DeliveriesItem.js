@@ -17,7 +17,7 @@ export const DeliveriesItem = ({
   deliveredItem: FinishDeliveriesProp,
 |}) => {
   const navigation = useNavigation();
-
+  console.log(JSON.stringify({ item, deliveredItem }));
   const handleAddItem = useCallback(() => {
     navigation.navigate(routes.SINGLE_DELIVERY, { item });
   }, [item, navigation]);

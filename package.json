@@ -19,6 +19,7 @@
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.0.1",
     "@react-navigation/stack": "^6.0.1",
+    "@testing-library/jest-native": "^4.0.2",
     "axios": "^0.21.1",
     "react": "17.0.1",
     "react-native": "0.64.2",
@@ -42,9 +43,14 @@
     "@babel/runtime": "^7.14.8",
     "@jest/create-cache-key-function": "^27.0.6",
     "@react-native-community/eslint-config": "^3.0.0",
+    "@testing-library/react-native": "^7.2.0",
+    "axios-mock-adapter": "^1.19.0",
     "babel-jest": "^27.0.6",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.2",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.23.4",
     "flow-bin": "^0.122.0",
@@ -54,6 +60,28 @@
     "regenerator-runtime": "^0.13.9"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "verbose": true,
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@)/"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text"
+    ],
+    "coverageDirectory": "test-coverage",
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
+      }
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest-config/setup.js"
+    ]
   }
 }

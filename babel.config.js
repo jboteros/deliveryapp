@@ -12,4 +12,10 @@ module.exports = {
       },
     ],
   ],
+  env: {
+    test: {
+      // requires to have non-transpiled node_module to work
+      plugins: ["transform-es2015-modules-commonjs"],
+    },
+  },
 };
