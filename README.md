@@ -43,3 +43,8 @@ yarn && yarn pod && yarn ios
 #or
 yarn android
 ```
+
+## Available Test
+
+yarn test
+
