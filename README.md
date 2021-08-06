@@ -1,5 +1,5 @@
 # deliveryapp
-DeliveryApp Prototype 
+Delivery Packages App Prototype 
 
 ## Setup
 
